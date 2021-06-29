@@ -199,23 +199,16 @@ END;
 /*=======================================
  \^o^/_______ EJERCICIO 8 ________\^o^/
 =======================================*/
-CREATE TYPE phones AS VARRAY(10) OF NUMBER(12);
 
-/
-
+SET SERVEROUTPUT ON
 DECLARE
-
- t phones;
-
+  TYPE TELEFONOS IS VARRAY(10) OF NUMBER;
+  TELF TELEFONOS;
 BEGIN
-
- t:=phones(36541,36542,36543,36544,36545,36546,36547,36548,36549,36550);
-
- FOR i IN 1..10 LOOP  
-
-    dbms_output.put_line(t(i));
-
-  END LOOP;
-
+    TELF:= TELEFONOS(36541,36542,36543,36544,36545,36546,36547,36548,36549,36550);
+    FOR ROW1 IN 1..TELF.COUNT LOOP
+      DBMS_OUTPUT.PUT_LINE ('El Telefono #'||ROW1||' - '||TELF(ROW1));
+    END LOOP;
 END;
 /
+
