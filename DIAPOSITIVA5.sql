@@ -125,8 +125,12 @@ BEGIN
 END;
 /
 */
---============= EJERCICIO 6 ================
-SET SERVEROUTPUT ON
+
+/*=======================================
+ \^o^/_______ EJERCICIO 6 ________\^o^/
+=======================================*/
+
+/*SET SERVEROUTPUT ON
 
 DECLARE
 
@@ -149,7 +153,6 @@ BEGIN
  COMMIT;
 
   
-
  DECLARE
 
  DEPARTAMENTOS DEPARTMENTS%ROWTYPE;
@@ -167,4 +170,52 @@ BEGIN
  END;  
 
 END;
+/
+*/
 
+/*=======================================
+ \^o^/_______ EJERCICIO 7 ________\^o^/
+=======================================*/
+/*SET SERVEROUTPUT ON
+
+DECLARE
+
+p_deptno DEPARTMENTS.DEPARTMENT_ID%TYPE;
+
+BEGIN  
+
+ p_deptno:=280;
+
+ DELETE FROM DEPARTMENTS WHERE DEPARTMENTS.DEPARTMENT_ID=p_deptno;
+
+ DBMS_OUTPUT.PUT_LINE('filas afectadas :'|| SQL%ROWCOUNT);
+
+ COMMIT;
+
+END;
+/
+*/
+
+/*=======================================
+ \^o^/_______ EJERCICIO 8 ________\^o^/
+=======================================*/
+CREATE TYPE phones AS VARRAY(10) OF NUMBER(12);
+
+/
+
+DECLARE
+
+ t phones;
+
+BEGIN
+
+ t:=phones(36541,36542,36543,36544,36545,36546,36547,36548,36549,36550);
+
+ FOR i IN 1..10 LOOP  
+
+    dbms_output.put_line(t(i));
+
+  END LOOP;
+
+END;
+/
