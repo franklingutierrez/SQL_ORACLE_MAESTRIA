@@ -2,7 +2,7 @@
  \^o^/_______ EJERCICIO 1 ________\^o^/
 =======================================*/
 
-CREATE TABLE PRUEBA (id INTEGER);
+/*CREATE TABLE PRUEBA (id INTEGER);
 
 SET SERVEROUTPUT ON
 DECLARE
@@ -15,3 +15,4 @@ BEGIN
   END LOOP;
 END;
 /
+*/
