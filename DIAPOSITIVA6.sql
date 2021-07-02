@@ -107,8 +107,9 @@ CREATE TABLE EMP AS select * from EMPLOYEES;
 
 ALTER TABLE EMP ADD STARTS varchar2(50);
 */
--- Segunda parte
 
+-- =====================Segunda parte
+/*
 set serveroutput on
 DECLARE
   p_numemp EMP.EMPLOYEE_ID%type:= 174;
@@ -121,5 +122,32 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE ('RPTA =>'||v_asterisco);
 END;
 /
+*/
 --Consultando con un Select
 --SELECT EMPLOYEE_ID, SALARY, STARTS FROM EMP WHERE EMPLOYEE_ID=184 OR EMPLOYEE_ID=174 OR EMPLOYEE_ID=176
+
+
+/* =======================================
+ \^o^/_______ EJERCICIO 4 ________\^o^/
+======================================= */
+SET SERVEROUTPUT ON
+
+--DESCRIBE V$DATABASE;
+
+--SELECT NAME, CREATED FROM V$DATABASE;
+
+DECLARE 
+
+v_pdb v$pdbs.NAME%type :='ORCLPDB';
+v_date DATE;
+v_date2 NUMERIC;
+v_date3 DATE:=SYSDATE; --01-07-2021
+BEGIN
+  SELECT CREATION_TIME INTO v_date FROM v$pdbs WHERE NAME=v_pdb;
+  v_date2 := (To_Date(v_date3, 'DD-MM-YYYY')- To_Date(v_date,'DD-MM-YYYY'));
+  IF v_date 2 < 30 THEN
+    DBMS_OUTPUT.PUT_LINE ('PDB CREADO ANTES DE 30 DIAS, ACT. TRANSCURRIO'||v_date2||'DIAS.')
+  ELSE
+    DBMS_OUTPUT.PUT_LINE ('PDB CREADO ANTES DE 30 DIAS, ACT. TRANSCURRIO'||v_date2||'DIAS.')
+END
+END
