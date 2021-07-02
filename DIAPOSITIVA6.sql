@@ -1,8 +1,8 @@
-/*=======================================
+/* =======================================
  \^o^/_______ EJERCICIO 1 ________\^o^/
-=======================================*/
+======================================= */
 
-/*CREATE TABLE PRUEBA (id INTEGER);
+/* CREATE TABLE PRUEBA (id INTEGER);
 
 SET SERVEROUTPUT ON
 DECLARE
@@ -14,13 +14,13 @@ BEGIN
     END IF;
   END LOOP;
 END;
-/
 */
 
 
-/*=======================================
+
+/* =======================================
  \^o^/_______ EJERCICIO 2 ________\^o^/
-=======================================*/
+======================================= */
 /*
 SET SERVEROUTPUT ON
 
@@ -66,19 +66,60 @@ BEGIN
 
   END CASE;
 
-  DBMS_OUTPUT.PUT_LINE('Número de Empleado: '|| p_empnro ||' SUELDO: '|| p_salary||' Bonificación Resultante: '||(p_bonus));
+  DBMS_OUTPUT.PUT_LINE('Numero de Empleado: '|| p_empnro ||' SUELDO: '|| p_salary||' Bonificación Resultante: '||(p_bonus));
 
  END;
 
 END;
+/
 */
-
+/* --MODO DOS DEL EJERCICIO 2--------------------
 SET SERVEROUTPUT ON
 DECLARE
   p_empnro INTEGER := 100;
   p_salary EMPLOYEES.SALARY%type;
-  p_bono NUMERIC(8)
+  p_bono NUMERIC(8,2) := 0;
 BEGIN
+  SELECT SALARY INTO p_salary FROM EMPLOYEES WHERE EMPLOYEE_ID = p_empnro;
+  
+  IF p_salary < 5000 THEN
+      p_bono := 10/100;
+  ELSIF p_salary >= 5000 AND p_salary <= 10000 THEN
+      p_bono := 15/100;
+    ELSIF p_salary > 10000 THEN
+      p_bono := 20/100;
+    ELSIF p_salary IS NULL THEN
+      p_bono := 0;
+    END IF;
+    DBMS_OUTPUT.PUT_LINE ('BONIFICACIÓN =>'|| (p_salary * p_bono));
+    
+END;
+*/
+
+
+/* =======================================
+ \^o^/_______ EJERCICIO 3 ________\^o^/
+======================================= */
+
+--Creando la tbala a partir de la tabla EMPLOYEES
+/*
+CREATE TABLE EMP AS select * from EMPLOYEES;
+
+ALTER TABLE EMP ADD STARTS varchar2(50);
+*/
+-- Segunda parte
+
+set serveroutput on
+DECLARE
+  p_numemp EMP.EMPLOYEE_ID%type:= 174;
+  p_salary EMP.SALARY%type;
+  v_asterisco EMP.STARTS%type:= NULL;
+BEGIN
+  SELECT SALARY INTO p_salary FROM EMP WHERE EMPLOYEE_ID = p_numemp;
+  v_asterisco := LPAD('*', ROUND((p_salary / 1000),0),'*');
+  UPDATE EMP SET STARTS = v_asterisco WHERE EMPLOYEE_ID = p_numemp;
+  DBMS_OUTPUT.PUT_LINE ('RPTA =>'||v_asterisco);
 END;
 /
-  
+--Consultando con un Select
+--SELECT EMPLOYEE_ID, SALARY, STARTS FROM EMP WHERE EMPLOYEE_ID=184 OR EMPLOYEE_ID=174 OR EMPLOYEE_ID=176
