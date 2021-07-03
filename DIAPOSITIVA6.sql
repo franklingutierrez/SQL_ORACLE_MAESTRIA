@@ -130,6 +130,7 @@ END;
 /* =======================================
  \^o^/_______ EJERCICIO 4 ________\^o^/
 ======================================= */
+/*
 SET SERVEROUTPUT ON
 
 --DESCRIBE V$DATABASE;
@@ -141,13 +142,148 @@ DECLARE
 v_pdb v$pdbs.NAME%type :='ORCLPDB';
 v_date DATE;
 v_date2 NUMERIC;
-v_date3 DATE:=SYSDATE; --01-07-2021
+v_date3 DATE:=SYSDATE; --'01-07-2021';
 BEGIN
   SELECT CREATION_TIME INTO v_date FROM v$pdbs WHERE NAME=v_pdb;
   v_date2 := (To_Date(v_date3, 'DD-MM-YYYY')- To_Date(v_date,'DD-MM-YYYY'));
-  IF v_date 2 < 30 THEN
-    DBMS_OUTPUT.PUT_LINE ('PDB CREADO ANTES DE 30 DIAS, ACT. TRANSCURRIO'||v_date2||'DIAS.')
+  IF v_date2 < 30 THEN
+    DBMS_OUTPUT.PUT_LINE ('PDB CREADO ANTES DE 30 DIAS, ACT. TRANSCURRIO'||v_date2||'DIAS.');
   ELSE
-    DBMS_OUTPUT.PUT_LINE ('PDB CREADO ANTES DE 30 DIAS, ACT. TRANSCURRIO'||v_date2||'DIAS.')
-END
-END
+    DBMS_OUTPUT.PUT_LINE ('PDB CREADO DESPUES DE 30 DIAS, ACT. TRANSCURRIO'||v_date2||'DIAS.');
+END IF;
+END;
+/
+*/
+
+/* =======================================
+ \^o^/_______ EJERCICIO 5 ________\^o^/
+======================================= */
+/*
+SET SERVEROUTPUT ON
+
+--SELECT * FROM DBA_OBJECTS;
+
+DECLARE
+
+ v_numobjs NUMBER;
+
+BEGIN
+
+ SELECT COUNT(*) INTO v_numobjs
+
+ FROM DBA_OBJECTS;
+
+
+ --DBMS_OUTPUT.PUT_LINE(v_numobjs);
+
+
+ CASE
+
+  WHEN v_numobjs>4000 THEN DBMS_OUTPUT.PUT_LINE('La cantidad de objetos de la tabla DBA_OBJECTS es mayor a 4000.');
+
+  WHEN v_numobjs<=4000 AND v_numobjs>=2000 THEN DBMS_OUTPUT.PUT_LINE('La cantidad de objetos de la tabla DBA_OBJECTS se encuentra entre 2000 y 4000.');
+
+  WHEN v_numobjs<2000 THEN DBMS_OUTPUT.PUT_LINE('La cantidad de objetos de la tabla DBA_OBJECTS es menor a 2000.');
+
+ END CASE;
+
+END;
+
+*/
+
+
+
+/* =======================================
+ \^o^/_______ EJERCICIO 6 ________\^o^/
+======================================= */
+/*
+SET SERVEROUTPUT ON
+
+DECLARE 
+
+ v_empleado EMPLOYEES%ROWTYPE;
+
+ v_total NUMBER;
+
+BEGIN  
+
+ SELECT COUNT(*) INTO v_total
+
+ FROM EMPLOYEES;
+ 
+
+ FOR i IN 100..(v_total+99) LOOP  
+
+  SELECT * INTO v_empleado  
+
+  FROM EMPLOYEES
+
+  WHERE EMPLOYEES.EMPLOYEE_ID = i;
+
+   
+  IF v_empleado.SALARY > 8000 THEN
+
+   DBMS_OUTPUT.PUT_LINE('FIRST_NAME: '||v_empleado.FIRST_NAME||' - LAST_NAME: '||v_empleado.LAST_NAME||' - SALARY: '||v_empleado.SALARY);
+
+  END IF;   
+
+ END LOOP;
+
+END;
+*/
+
+
+-------------OTRA FORMA
+-- FORMATO CON CONDICION FOR
+
+SET SERVEROUTPUT ON
+DECLARE
+  v_countrow INTEGER;
+  v_first_name EMPLOYEES.FIRST_NAME%type;
+  v_last_name EMPLOYEES.LAST_NAME%type;
+  v_salary EMPLOYEES.SALARY%type;
+
+BEGIN
+  
+  SELECT COUNT(EMPLOYEE_ID) INTO v_countrow FROM EMPLOYEES;
+  
+  FOR i IN 0..v_countrow-1 LOOP
+    
+    SELECT FIRST_NAME, LAST_NAME, SALARY INTO v_first_name, v_last_name, v_salary
+    FROM EMPLOYEES OFFSET i ROWS FETCH NEXT 1 ROWS ONLY;
+    
+    IF v_salary > 8000 THEN
+      DBMS_OUTPUT.PUT_LINE(v_first_name || ' - '||v_last_name|| ' - '||v_salary);
+      END IF;
+  END LOOP;
+
+END;
+/
+
+-- FORMATO CON CONDICION WHILE
+/*
+SET SERVEROUTPUT ON
+DECLARE
+  v_countrow INTEGER;
+  v_row INTEGER:=0;
+  v_first_name EMPLOYEES.FIRST_NAME%type;
+  v_last_name EMPLOYEES.LAST_NAME%type;
+  v_salary EMPLOYEES.SALARY%type;
+
+BEGIN
+  
+  SELECT COUNT(EMPLOYEE_ID) INTO v_countrow FROM EMPLOYEES;
+  WHILE v_row < v_countrow LOOP
+    
+    SELECT FIRST_NAME, LAST_NAME, SALARY INTO v_first_name, v_last_name, v_salary
+    FROM EMPLOYEES OFFSET v_row ROWS FETCH NEXT 1 ROWS ONLY;
+    
+    IF v_salary > 8000 THEN
+      DBMS_OUTPUT.PUT_LINE(v_first_name || ' - '||v_last_name|| ' - '||v_salary);
+      END IF;
+      v_row:= v_row + 1;
+  END LOOP;
+
+END;
+/
+*/
