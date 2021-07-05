@@ -1,6 +1,7 @@
-
-
-
+/* =======================================
+ \^o^/_______ EJERCICIO 1 ________\^o^/
+======================================= */
+/*
 CREATE SEQUENCE SEQ_ID
 
 START WITH 300
@@ -109,11 +110,159 @@ BEGIN
 
  E1:= MIOBJETO;
 
- v_mensaje:=E1.INSERTA_ESTUDIANTE('LENIN');
+ v_mensaje:=E1.INSERTA_ESTUDIANTE('CARLOTA');
 
  DBMS_OUTPUT.PUT_LINE(v_mensaje);
 
 END;
 
 /
+
+*/
+
+/* =======================================
+ \^o^/_______ EJERCICIO 2 ________\^o^/
+======================================= */
+/*
+CREATE OR REPLACE TYPE OBJ_NOTAS AS OBJECT(
+
+ N1 NUMBER,
+
+ N2 NUMBER,
+
+ N3 NUMBER,
+
+ CONSTRUCTOR FUNCTION OBJ_NOTAS RETURN SELF AS RESULT,
+
+ CONSTRUCTOR FUNCTION OBJ_NOTAS(V_N1 NUMBER,V_N2 NUMBER,V_N3 NUMBER) RETURN SELF AS RESULT,
+
+ MEMBER FUNCTION MENSAJE_ESTUDIANTE(V_N1 NUMBER,V_N2 NUMBER,V_N3 NUMBER) RETURN VARCHAR2,
+
+ MEMBER PROCEDURE PROMEDIO_ESTUDIANTE(V_N1 NUMBER,V_N2 NUMBER,V_N3 NUMBER)
+
+);
+
+/
+
+---CREANDO PRIMER CONSTRUCTOR INICIALIZA NOTAS A 0
+CREATE OR REPLACE TYPE BODY OBJ_NOTAS 
+
+AS
+
+ CONSTRUCTOR FUNCTION OBJ_NOTAS RETURN SELF AS RESULT
+
+ IS
+
+ BEGIN
+
+  SELF.N1 := 0;
+
+  SELF.N2 := 0;
+
+  SELF.N3 := 0;
+
+  RETURN;
+
+ END OBJ_NOTAS;
+
+
+
+ CONSTRUCTOR FUNCTION OBJ_NOTAS(V_N1 NUMBER,V_N2 NUMBER,V_N3 NUMBER) RETURN SELF AS RESULT
+
+ IS
+
+ BEGIN
+
+  SELF.N1 := V_N1;
+
+  SELF.N2 := V_N2;
+
+  SELF.N3 := V_N3;
+
+  RETURN;
+
+ END OBJ_NOTAS;
+
+  
+
+ MEMBER FUNCTION MENSAJE_ESTUDIANTE(V_N1 NUMBER,V_N2 NUMBER,V_N3 NUMBER)
+
+ RETURN VARCHAR2
+
+ IS
+
+ v_promedio NUMBER;
+
+ v_message VARCHAR2(70);
+
+ BEGIN
+
+  v_promedio:=(V_N1+V_N2+V_N3)/3;
+
+  IF v_promedio<10.5 THEN
+
+   v_message:='DESAPROBADO';
+
+  ELSIF v_promedio>=10.5 AND v_promedio<=20 THEN
+
+   v_message:='APROBADO';
+
+  END IF;
+
+  RETURN v_message;
+
+ END MENSAJE_ESTUDIANTE;
+
+  
+
+ MEMBER PROCEDURE PROMEDIO_ESTUDIANTE(V_N1 NUMBER,V_N2 NUMBER,V_N3 NUMBER)
+
+ IS
+
+ v_promedio NUMBER;
+
+ BEGIN
+
+  v_promedio:=ROUND((V_N1+V_N2+V_N3)/3);
+
+  DBMS_OUTPUT.PUT_LINE('EL PROMEDIO DEL ESTUDIANTE ES: '||v_promedio);
+
+ END PROMEDIO_ESTUDIANTE;
+
+  
+
+END;
+
+/
+*/
+-- CONSULTA PARA VER SI ESTA APROBADO O DESAPROBADO 
+DECLARE  
+
+ n1 NUMBER;
+
+ n2 NUMBER;
+
+ n3 NUMBER;
+
+ v_mensaje VARCHAR(70);
+
+ v_notas OBJ_NOTAS;  
+
+BEGIN
+
+ n1:=11;
+
+ n2:=12;
+
+ n3:=9;
+
+ v_notas:= OBJ_NOTAS;
+
+ v_mensaje:=v_notas.MENSAJE_ESTUDIANTE(n1,n2,n3);
+
+ DBMS_OUTPUT.PUT_LINE(v_mensaje);
+
+ v_notas.PROMEDIO_ESTUDIANTE(n1,n2,n3);
+
+END;
 
