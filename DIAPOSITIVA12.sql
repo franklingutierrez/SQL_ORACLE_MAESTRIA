@@ -1,0 +1,250 @@
+/* =======================================
+ \^o^/_______ EJERCICIO 1 ________\^o^/
+======================================= */
+--CREANDO TIPO OBJETO ELIPSE
+/*
+CREATE OR REPLACE TYPE elipse AS OBJECT(
+
+ r1 NUMBER,
+
+ r2 NUMBER,
+
+ MAP MEMBER FUNCTION area RETURN NUMBER
+
+);
+
+/
+
+
+--CREANDO CUERPO DEL TIPO OBJETO ELIPSE
+
+CREATE OR REPLACE TYPE BODY elipse AS
+
+ MAP MEMBER FUNCTION area RETURN NUMBER
+
+ IS
+
+  PI CONSTANT NUMBER:=3.14;
+
+ BEGIN
+
+  RETURN PI*r1*r2;
+
+ END area;
+
+END;
+
+/
+
+
+DECLARE
+
+ v_elip elipse;
+
+BEGIN
+
+ v_elip:= new elipse(20,8);
+
+ DBMS_OUTPUT.PUT_LINE('AREA DEL ELIPSE ES: '||v_elip.area());
+
+END;
+
+/
+
+----------------------------------------------------------------
+
+CREATE OR REPLACE TYPE circulo AS OBJECT(
+
+ radio NUMBER,
+
+ MAP MEMBER FUNCTION area RETURN NUMBER
+
+);
+
+/
+
+
+
+CREATE OR REPLACE TYPE BODY circulo AS
+
+ MAP MEMBER FUNCTION area RETURN NUMBER
+
+ IS
+
+  PI CONSTANT NUMBER:=3.14;
+
+ BEGIN
+
+  RETURN PI*radio*radio;
+
+ END area;
+
+
+
+END;
+
+/
+
+DECLARE
+
+ v_cir circulo;
+
+BEGIN
+
+ v_cir:= new circulo(3);
+
+ DBMS_OUTPUT.PUT_LINE('AREA DEL CIRCULO ES: '||v_cir.area());
+
+END;
+
+/
+
+---------------------------------------------------------------------------
+
+CREATE OR REPLACE TYPE esfera AS OBJECT(
+
+ radio NUMBER,
+
+ MAP MEMBER FUNCTION area RETURN NUMBER
+
+);
+
+/
+
+
+
+CREATE OR REPLACE TYPE BODY esfera AS
+
+ MAP MEMBER FUNCTION area RETURN NUMBER
+
+ IS
+
+  PI CONSTANT NUMBER:=3.14;
+
+ BEGIN
+
+  RETURN 4*PI*radio*radio;
+
+ END area;
+
+
+
+END;
+
+/
+
+DECLARE
+
+ v_esf esfera;
+
+BEGIN
+
+ v_esf:= new esfera(3);
+
+ DBMS_OUTPUT.PUT_LINE('AREA DEL ESFERA ES: '||v_esf.area());
+
+END;
+
+/
+
+*/
+
+/* =======================================
+ \^o^/_______ EJERCICIO 2 ________\^o^/
+======================================= */
+
+CREATE OR REPLACE TYPE OBJ_PERSONA AS OBJECT
+
+( 
+
+ DNI VARCHAR2(10), 
+
+ NOMBRES VARCHAR2(75),
+
+ FECH_NAC DATE,
+
+ FINAL MEMBER FUNCTION EDAD(FECH_NAC DATE) RETURN NUMBER
+
+)NOT FINAL;
+
+/
+
+CREATE TABLE PERSONA OF OBJ_PERSONA;
+
+/
+
+CREATE OR REPLACE TYPE BODY OBJ_PERSONA
+
+AS
+
+ FINAL MEMBER FUNCTION EDAD(FECH_NAC DATE) RETURN NUMBER
+
+ IS
+
+  v_edad NUMBER;
+
+ BEGIN
+
+  v_edad:=FLOOR(MONTHS_BETWEEN(FECH_NAC,SYSDATE) / 12);
+
+  RETURN v_edad;
+
+ END;
+
+END;
+
+/
+
+CREATE TABLE TELEFONO
+
+(
+
+ DNI VARCHAR2(10),
+
+ TELEFONO VARCHAR(20)
+
+)
+
+/
+
+CREATE TABLE UBICACION
+
+(
+
+ ID_UBICACION NUMBER,
+
+ NOMBRE_CIUDAD VARCHAR2(100)
+
+)
+
+/
+
+CREATE OR REPLACE TYPE OBJ_LUGAR_ATENCION AS OBJECT
+
+(
+
+ ID NUMBER,
+
+ DNI VARCHAR2(10),
+
+ ID_UBICACION NUMBER,
+
+ DIRECCION VARCHAR2(150),
+
+ MEMBER FUNCTION INSERTAR RETURN VARCHAR2,
+
+ MEMBER PROCEDURE EDADES_PERSONAS_OFICINAS,
+
+ MEMBER FUNCTION NOMBRE_EMPLEADO_LUGAR RETURN VARCHAR2,
+
+ MEMBER FUNCTION CANTIDAD_PERSONAS RETURN NUMBER,
+
+ MEMBER PROCEDURE TELEFONOS_PERSONA
+
+);
+
+/
+
+CREATE TABLE LUGAR_ATENCION OF OBJ_LUGAR_ATENCION;
+
+/
